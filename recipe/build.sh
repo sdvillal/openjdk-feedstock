@@ -35,55 +35,6 @@ function jdk_install
   mv man/* $INSTALL_DIR/man
 }
 
-function source_build
-{
-  cd src
-
-  if [[ "$target_platform" == linux* ]]; then
-    rm $PREFIX/include/iconv.h
-  fi
-
-  export CPATH=$PREFIX/include
-  export LIBRARY_PATH=$PREFIX/lib
-
-  export -n CFLAGS
-  export -n CXXFLAGS
-  export -n LDFLAGS
-
-  if [[ "$CI" == "travis" ]]; then
-    export CPU_COUNT=4
-  fi
-
-  chmod +x configure
-  ./configure \
-    --prefix=$PREFIX \
-    --with-extra-cflags="$CFLAGS" \
-    --with-extra-cxxflags="$CFLAGS" \
-    --with-extra-ldflags="$LDFLAGS" \
-    --with-x=$PREFIX \
-    --with-cups=$PREFIX \
-    --with-freetype=system \
-    --with-fontconfig=$PREFIX \
-    --with-giflib=system \
-    --with-libpng=system \
-    --with-zlib=system \
-    --with-libjpeg=system \
-    --with-lcms=system \
-    --with-stdc++lib=dynamic \
-    --disable-warnings-as-errors \
-    --with-boot-jdk=$SRC_DIR/bootjdk
-
-  make JOBS=$CPU_COUNT
-  make images
-}
-
-if [[ "$target_platform" == linux* ]]; then 
-  export INSTALL_DIR=$SRC_DIR/bootjdk/
-  jdk_install
-  source_build
-  cd build/*/images/jdk
-fi
-
 export INSTALL_DIR=$PREFIX
 jdk_install
 
