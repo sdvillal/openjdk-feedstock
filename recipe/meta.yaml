@@ -69,32 +69,16 @@ build:
 requirements:
   build:
   host:
-    - zlib              # [unix]
-    - freetype          # [linux]
-    - harfbuzz          # [linux]
-    - libpng            # [linux]
-    - giflib            # [linux]
-    - jpeg              # [linux]
-    - libcups           # [linux]
-    - alsa-lib          # [linux]
-    - fontconfig        # [linux]
-    - xorg-libx11       # [linux]
-    - xorg-libxext      # [linux]
-    - xorg-libxt        # [linux]
-    - xorg-libxtst      # [linux]
-    - xorg-libxrender   # [linux]
-    - xorg-libxrandr    # [linux]
-    - xorg-libxi        # [linux]
-    - lcms2             # [linux]
-    - vs2013_runtime    # [win]
+    - alsa-lib        # [linux]
+    - vs2013_runtime  # [win]
   run:
-    - xorg-libx11       # [linux]
-    - xorg-libxext      # [linux]
-    - xorg-libxtst      # [linux]
-    - xorg-libxrender   # [linux]
-    - xorg-libxi        # [linux]
-    - {{ pin_compatible("alsa-lib", max_pin="x.x.x") }}     # [linux]
-    - vs2013_runtime    # [win]
+    - xorg-libx11                                        # [linux]
+    - xorg-libxext                                       # [linux]
+    - xorg-libxtst                                       # [linux]
+    - xorg-libxrender                                    # [linux]
+    - xorg-libxi                                         # [linux]
+    - {{ pin_compatible("alsa-lib", max_pin="x.x.x") }}  # [linux]
+    - vs2013_runtime  # [win]
 
 test:
   requires:
