@@ -50,10 +50,9 @@ source:
 build:
   number: {{ build_number }}
 
-  # Could this be necessary?
+  # This is needed at least in macos, and does not seem harmful for our uses in the other OSes
   # See https://conda.io/projects/conda-build/en/latest/resources/define-metadata.html#binary-relocation
-  # Java is working fine without relocation, but seems to choke if conda messes around these shared objects
-  # binary_relocation: False
+  binary_relocation: False
 
   script:
     # --- unix
