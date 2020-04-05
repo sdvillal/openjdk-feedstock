@@ -9,6 +9,7 @@ Feedstock license: BSD 3-Clause
 
 Summary: An open-source implementation of the JDK
 
+AdoptOpenJDK uses infrastructure, build and test scripts to produce prebuilt binaries from OpenJDK™ class libraries and a choice of either the OpenJDK HotSpot or Eclipse OpenJ9 VM. All AdoptOpenJDK binaries and scripts are open source licensed and available for free.
 
 
 Current build status
@@ -119,10 +120,5 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
-* [@CJ-Wright](https://github.com/CJ-Wright/)
-* [@hadim](https://github.com/hadim/)
-* [@johanneskoester](https://github.com/johanneskoester/)
-* [@mingwandroid](https://github.com/mingwandroid/)
 * [@sdvillal](https://github.com/sdvillal/)
-* [@sodre](https://github.com/sodre/)
 
