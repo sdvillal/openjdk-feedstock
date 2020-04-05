@@ -14,7 +14,7 @@
 #     https://github.com/conda-forge/openjdk-feedstock/pull/1
 #   - In linux and macos, we distribute the whole JDK, including demos
 # TODOs:
-#   - Coordinate also with JRE recipe (maybe)
+#   - Coordinate also with JRE recipe (maybe) => These days best practice is to release apps with runtime
 #   - Create a dejavu-fonts package
 #   - Segregate also windows package to its own dir (see qupath recipe) or revert the change for unix
 # Notes:
