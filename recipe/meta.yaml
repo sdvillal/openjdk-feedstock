@@ -1,9 +1,31 @@
+#
+# Conda-forge friendly recipe fo AdoptOpenJDK OpenJDK builds.
+#
+# See the original at:
+#   https://github.com/conda-forge/openjdk-feedstock
+# Differences:
+#   - We do not maintain ppc64le or aarch64 builds (should be trivial to bring back)
+#   - We settle to use AdoptOpenJDK as only distribution
+#   - We put the openjdk in a segregated directory to avoid hurdles like:
+#     https://github.com/conda-forge/openjdk-feedstock/pull/60
+#   - We do not ship dejavu fonts - likely these would be better having their own package:
+#     https://github.com/conda-forge/openjdk-feedstock/pull/1
+#   - We distribute the whole JDK, including demos
+# TODOs:
+#   - Coordinate also with JRE recipe (maybe)
+#   - Create a dejavu-fonts package
+# Notes:
+#   - About support and LTSness:
+#     https://adoptopenjdk.net/support.html
+#
+
 {% set name = "openjdk" %}
 {% set version = "14" %}
-{% set zulu_build = "14.27.1-ca" %}
-{% set openjdk_revision = "13" %}
+{% set build_major = "14" %}
+{% set build_minor = "36" %}
+{% set build_plus = build_major + "+" + build_minor %}
+{% set build_under = build_major + "_" + build_minor %}
 {% set build_number = 0 %}
-{% set adopt_openjdk_build = "14_36" %}
 
 package:
   name: {{ name|lower }}
@@ -11,26 +33,43 @@ package:
 
 source:
 
-  - url: https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14+36/OpenJDK14U-jdk_x64_linux_hotspot_{{ adopt_openjdk_build }}.tar.gz   # [linux64]
+  - url: https://github.com/AdoptOpenJDK/openjdk{{ build_major }}-binaries/releases/download/jdk-{{ build_plus }}/OpenJDK{{ build_major }}U-jdk_x64_linux_hotspot_{{ build_under }}.tar.gz   # [linux64]
     sha256: 6c06853332585ab58834d9e8a02774b388e6e062ef6c4084b4f058c67f2e81b5  # [linux64]
+    folder: openjdk  # [linux64]
 
-  - url: https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip  # [linux]
-    sha256: 7576310b219e04159d35ff61dd4a4ec4cdba4f35c00e002a136f00e96a908b0a  # [linux]
-    folder: fonts  # [linux]
+  - url: https://github.com/AdoptOpenJDK/openjdk{{ build_major }}-binaries/releases/download/jdk-{{ build_plus }}/OpenJDK{{ build_major }}U-jdk_x64_mac_hotspot_{{ build_under }}.tar.gz   # [osx]
+    sha256: aabc3aebb0abf1ba64d9bd5796d0c7eb7239983f6e4c0f015b5b88be5616e4bd  # [osx]
+    folder: openjdk  # [macos]
 
-  - url: https://cdn.azul.com/zulu/bin/zulu{{ zulu_build }}-jdk{{ version }}-macosx_x64.zip  # [osx]
-    sha256: 0dd8683a015081cba99421928481e3ca8f0fa4db249988b64f6a2a472e20c656  # [osx]
-
-  - url: https://cdn.azul.com/zulu/bin/zulu{{ zulu_build }}-jdk{{ version }}-win_x64.zip  # [win64]
-    sha256: b83aab88d62d2e98c1abb00c0a0d598547851782b9b2ee6b6cf8bc98caa37502  # [win64]
+  - url: https://github.com/AdoptOpenJDK/openjdk{{ build_major }}-binaries/releases/download/jdk-{{ build_plus }}/OpenJDK{{ build_major }}U-jdk_x64_windows_hotspot_{{ build_under }}.tar.gz   # [win64]
+    sha256: 9d8351a26c28498bdfe56e54545263588132c51954a4e8811d72bc9a8933afd6  # [win64]
+    folder: openjdk  # [win64]
 
 build:
   number: {{ build_number }}
 
+  # Could this be necessary?
+  # See https://conda.io/projects/conda-build/en/latest/resources/define-metadata.html#binary-relocation
+  # Java is working fine without relocation, but seems to choke if conda messes around these shared objects
+  # binary_relocation: False
+
+  script:
+    # --- unix
+    - mkdir -p ${PREFIX}/opt                             # [unix]
+    - mv openjdk ${PREFIX}/opt/openjdk-{{ build_plus }}  # [unix]
+    - cd ${PREFIX}/opt                                   # [unix]
+    - ln -s openjdk-{{ build_plus }} openjdk             # [unix]
+    - cd ${PREFIX}/bin                                   # [unix]
+    - ln -s ../opt/openjdk/bin/* .                       # [unix]
+    - mkdir -p "${PREFIX}"/etc/conda/activate.d                                                              # [unix]
+    - cp "${RECIPE_DIR}/scripts/activate.sh" "${PREFIX}/etc/conda/activate.d/${PKG_NAME}_activate.sh"        # [unix]
+    - mkdir -p "${PREFIX}"/etc/conda/deactivate.d                                                            # [unix]
+    - cp "${RECIPE_DIR}/scripts/deactivate.sh" "${PREFIX}/etc/conda/deactivate.d/${PKG_NAME}_deactivate.sh"  # [unix]
+
 requirements:
   build:
   host:
-    - zlib              # [linux or osx]
+    - zlib              # [unix]
     - freetype          # [linux]
     - harfbuzz          # [linux]
     - libpng            # [linux]
@@ -61,7 +100,7 @@ test:
   requires:
     - {{ compiler('c') }}  # [not win]
   files:
-    - test-jni  # [not win]
+    - test-jni     # [not win]
     - test-jni.sh  # [not win]
     - test-nio
   commands:
@@ -69,22 +108,24 @@ test:
     - ./test-jni.sh  # [not win]
 
 about:
-  home: https://www.azul.com/products/zulu/  # [not linux]
-  home: https://openjdk.java.net             # [linux]
+  home: https://openjdk.java.net
   license: GPL-2.0
   license_family: GPL
   license_file:
     - LICENSE
-    - fonts/LICENSE   # [linux]
-  summary: The Zulu OpenJDK build.           # [not linux]
   summary: An open-source implementation of the JDK   # [linux]
-  description: Zulu OpenJDK is an open source build of the Java JDK.   # [not linux]
+  description: >
+    AdoptOpenJDK uses infrastructure, build and test scripts to produce
+    prebuilt binaries from OpenJDK™ class libraries and a choice of either
+    the OpenJDK HotSpot or Eclipse OpenJ9 VM.
+    All AdoptOpenJDK binaries and scripts are open source licensed and available for free.
 
 extra:
   recipe-maintainers:
+    - sdvillal
+  conda-forge-recipe-maintainers:
     - johanneskoester
     - sodre
     - mingwandroid
     - hadim
     - CJ-Wright
-    - sdvillal
