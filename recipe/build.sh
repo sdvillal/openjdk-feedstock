@@ -6,7 +6,7 @@ find . -maxdepth 1 \
        -exec sh -c "mkdir $PREFIX/$(basename {}); mv $(basename {})/* $PREFIX/$(basename {})/" \;
 
 if [ -f "DISCLAIMER" ]; then
-    mv DISCLAIMER $INSTALL_DIR/DISCLAIMER
+    mv DISCLAIMER $PREFIX/openjdk-DISCLAIMER
 fi
 
 if [[ "$target_platform" == linux* ]]; then
