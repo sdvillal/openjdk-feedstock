@@ -57,12 +57,12 @@ build:
 
   script:
     # --- unix
-    - mkdir -p ${PREFIX}/opt                             # [unix]
-    - mv openjdk ${PREFIX}/opt/openjdk-{{ build_plus }}  # [unix]
-    - cd ${PREFIX}/opt                                   # [unix]
-    - ln -s openjdk-{{ build_plus }} openjdk             # [unix]
-    - cd ${PREFIX}/bin                                   # [unix]
-    - ln -s ../opt/openjdk/bin/* .                       # [unix]
+    - mkdir -p ${PREFIX}/opt/openjdk-{{ build_plus }}       # [unix]
+    - mv openjdk/* ${PREFIX}/opt/openjdk-{{ build_plus }}/  # [unix]
+    - cd ${PREFIX}/opt                                      # [unix]
+    - ln -s openjdk-{{ build_plus }} openjdk                # [unix]
+    - cd ${PREFIX}/bin                                      # [unix]
+    - ln -s ../opt/openjdk/bin/* .                          # [unix]
     - mkdir -p "${PREFIX}"/etc/conda/activate.d                                                              # [unix]
     - cp "${RECIPE_DIR}/scripts/activate.sh" "${PREFIX}/etc/conda/activate.d/${PKG_NAME}_activate.sh"        # [unix]
     - mkdir -p "${PREFIX}"/etc/conda/deactivate.d                                                            # [unix]
