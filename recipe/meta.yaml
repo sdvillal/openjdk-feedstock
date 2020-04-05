@@ -44,7 +44,7 @@ source:
     sha256: aabc3aebb0abf1ba64d9bd5796d0c7eb7239983f6e4c0f015b5b88be5616e4bd  # [osx]
     folder: openjdk  # [macos]
 
-  - url: https://github.com/AdoptOpenJDK/openjdk{{ build_major }}-binaries/releases/download/jdk-{{ build_plus }}/OpenJDK{{ build_major }}U-jdk_x64_windows_hotspot_{{ build_under }}.tar.gz   # [win64]
+  - url: https://github.com/AdoptOpenJDK/openjdk{{ build_major }}-binaries/releases/download/jdk-{{ build_plus }}/OpenJDK{{ build_major }}U-jdk_x64_windows_hotspot_{{ build_under }}.zip   # [win64]
     sha256: 9d8351a26c28498bdfe56e54545263588132c51954a4e8811d72bc9a8933afd6  # [win64]
 
 build:
