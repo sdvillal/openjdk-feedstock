@@ -46,7 +46,6 @@ source:
 
   - url: https://github.com/AdoptOpenJDK/openjdk{{ build_major }}-binaries/releases/download/jdk-{{ build_plus }}/OpenJDK{{ build_major }}U-jdk_x64_windows_hotspot_{{ build_under }}.tar.gz   # [win64]
     sha256: 9d8351a26c28498bdfe56e54545263588132c51954a4e8811d72bc9a8933afd6  # [win64]
-    folder: openjdk  # [win64]
 
 build:
   number: {{ build_number }}
