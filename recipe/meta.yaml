@@ -6,14 +6,17 @@
 # Differences:
 #   - We do not maintain ppc64le or aarch64 builds (should be trivial to bring back)
 #   - We settle to use AdoptOpenJDK as only distribution
-#   - We put the openjdk in a segregated directory to avoid hurdles like:
+#   - In linux and mac we put the openjdk in a segregated directory to avoid hurdles like:
 #     https://github.com/conda-forge/openjdk-feedstock/pull/60
+#     Note this then makes libs, includes not be immediately available.
+#     If this is a problem, we can revise the decision.
 #   - We do not ship dejavu fonts - likely these would be better having their own package:
 #     https://github.com/conda-forge/openjdk-feedstock/pull/1
-#   - We distribute the whole JDK, including demos
+#   - In linux and macos, we distribute the whole JDK, including demos
 # TODOs:
 #   - Coordinate also with JRE recipe (maybe)
 #   - Create a dejavu-fonts package
+#   - Segregate also windows package to its own dir (see qupath recipe) or revert the change for unix
 # Notes:
 #   - About support and LTSness:
 #     https://adoptopenjdk.net/support.html
@@ -78,7 +81,7 @@ requirements:
     - xorg-libxrender                                    # [linux]
     - xorg-libxi                                         # [linux]
     - {{ pin_compatible("alsa-lib", max_pin="x.x.x") }}  # [linux]
-    - vs2013_runtime  # [win]
+    - vs2013_runtime                                     # [win]
 
 test:
   requires:

@@ -9,9 +9,6 @@ if errorlevel 1 exit 1
 XCOPY lib\* %LIBRARY_LIB% /s /i /y
 if errorlevel 1 exit 1
 
-XCOPY DISCLAIMER %LIBRARY_PREFIX% /s /i /y
-if errorlevel 1 exit 1
-
 if not exist "%LIBRARY_PREFIX%\conf\" mkdir %LIBRARY_PREFIX%\conf\
 XCOPY conf\* %LIBRARY_PREFIX%\conf\ /s /i /y
 if errorlevel 1 exit 1
