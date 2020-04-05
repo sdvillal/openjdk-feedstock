@@ -42,7 +42,7 @@ source:
 
   - url: https://github.com/AdoptOpenJDK/openjdk{{ build_major }}-binaries/releases/download/jdk-{{ build_plus }}/OpenJDK{{ build_major }}U-jdk_x64_mac_hotspot_{{ build_under }}.tar.gz   # [osx]
     sha256: aabc3aebb0abf1ba64d9bd5796d0c7eb7239983f6e4c0f015b5b88be5616e4bd  # [osx]
-    folder: openjdk  # [macos]
+    folder: openjdk  # [osx]
 
   - url: https://github.com/AdoptOpenJDK/openjdk{{ build_major }}-binaries/releases/download/jdk-{{ build_plus }}/OpenJDK{{ build_major }}U-jdk_x64_windows_hotspot_{{ build_under }}.zip   # [win64]
     sha256: 9d8351a26c28498bdfe56e54545263588132c51954a4e8811d72bc9a8933afd6  # [win64]
@@ -57,12 +57,14 @@ build:
 
   script:
     # --- unix
-    - mkdir -p ${PREFIX}/opt/openjdk-{{ build_plus }}       # [unix]
-    - mv openjdk/* ${PREFIX}/opt/openjdk-{{ build_plus }}/  # [unix]
-    - cd ${PREFIX}/opt                                      # [unix]
-    - ln -s openjdk-{{ build_plus }} openjdk                # [unix]
-    - cd ${PREFIX}/bin                                      # [unix]
-    - ln -s ../opt/openjdk/bin/* .                          # [unix]
+    - mkdir -p ${PREFIX}/opt                             # [unix]
+    - mv openjdk ${PREFIX}/opt/openjdk-{{ build_plus }}  # [linux]
+    - mv openjdk/Contents/Home ${PREFIX}/opt/openjdk-{{ build_plus }}  # [osx]
+    - cd ${PREFIX}/opt                                   # [unix]
+    - ln -s openjdk-{{ build_plus }} openjdk             # [unix]
+    - mkdir -p ${PREFIX}/bin                             # [unix]
+    - cd ${PREFIX}/bin                                   # [unix]
+    - ln -s ../opt/openjdk/bin/* .                       # [unix]
     - mkdir -p "${PREFIX}"/etc/conda/activate.d                                                              # [unix]
     - cp "${RECIPE_DIR}/scripts/activate.sh" "${PREFIX}/etc/conda/activate.d/${PKG_NAME}_activate.sh"        # [unix]
     - mkdir -p "${PREFIX}"/etc/conda/deactivate.d                                                            # [unix]
